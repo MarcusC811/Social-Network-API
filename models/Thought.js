@@ -15,10 +15,16 @@ const thoughtsSchema = new Schema(
         username: {
             type: String,
             required: true,
+            get: formatDate,
         },
         reactions: [reactionSchema],
     }
-)
+);
+
+function formatDate (v) {
+    const timeStamp = new Date(v * 1000);;
+    return timeStamp.toLocaleString();
+}
 
 const Thought = model('thought', thoughtsSchema);
 
