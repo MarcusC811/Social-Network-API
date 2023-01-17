@@ -24,12 +24,12 @@ module.exports = {
             .then(() => res.json( {message: "User was deleted"} ))
             .catch((err) => res.status(500).json(err));
     },
-    // POST to create a reaction stored in a single thought's reactions array field
-    addReaction() {
+    // POST to add a new friend to a user's friend list
+    addFriend() {
 
     },
-    // DELETE to pull and remove a reaction by the reaction's reactionId value
-    deleteReaction() {
+    // DELETE to remove a friend from a user's friend list
+    deleteFriend() {
 
     },
 }
