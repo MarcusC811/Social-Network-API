@@ -11,15 +11,25 @@ const thoughtsSchema = new Schema(
         createdAt: {
             type: Date,
             default: Date.now,
+            get: formatDate,
         },
         username: {
             type: String,
             required: true,
-            get: formatDate,
         },
         reactions: [reactionSchema],
+    },
+    {
+        toJSON: {
+          virtuals: true,
+        },
+        id: false,
     }
 );
+
+thoughtsSchema.virtual('reactionCount').get(function () {
+    return this.reactions.length;
+});
 
 function formatDate (v) {
     const timeStamp = new Date(v * 1000);;
