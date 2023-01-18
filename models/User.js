@@ -8,7 +8,7 @@ const userSchema = new Schema(
             type: String,
             unique: true,
             required: true,
-            type: { $trim: { input: "$type" } },
+            trim: true,
         },
         email: {
             type: String,
@@ -20,7 +20,11 @@ const userSchema = new Schema(
                 },
             },
         },
-        thoughts: [thoughtsSchema],
+        thoughts: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: 'thought'
+            }],
         friends: [
             {
                 type: Schema.Types.ObjectId,

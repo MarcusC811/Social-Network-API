@@ -15,3 +15,4 @@ router.route('/:id').get(getSingleUser).put(updateUser).delete(deleteUser);
 
 router.route('/api/users/:userId/friends/:friendId').get(getUser).post(postNewUser);
 
+module.exports = router;
