@@ -1,4 +1,3 @@
-const { json } = require('express');
 const { User, Thought } = require('../../models');
 
 module.exports = {
@@ -27,7 +26,7 @@ module.exports = {
     },
     // PUT to update a user by its _id
     updateUser() {
-        User.findOneAndUpdate({ _id: req.params.id }, {username: req.body.username})
+        User.findOneAndUpdate({ _id: req.params.id }, {$set: req.body})
         .then((user) => 
             !user
                 ? res.status(404).json({message: "Invalid submission"})

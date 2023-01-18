@@ -2,24 +2,44 @@ const { User, Thought } = require('../../models');
 
 module.exports = {
     // GET to get all thoughts
-    getThoughts() {
-        Thought.find().then((thoughts) => res.json(thoughts));
+    getThoughts(req, res) {
+        Thought.find().then((thoughts) => {res.json(thoughts)});
     },
     // GET to get a single thought by its _id
-    getSingleThought() {
-        Thought.findOne( {_id: req.params.id}
-            .then((thought) => 
+    getSingleThought(req, res) { 
+        Thought.findOne( {_id: req.params.id} )
+            .then((thought) => {
             !thought
                 ? res.status(404).json({ message: "Invalid ID" })
-                : res.json(thought))
-            .catch((err) => res.status(500).json(err)));
+                : res.json(thought)
+            })
+            .catch((err) => {
+                console.log(err);
+                res.status(500).json(err);
+              });
     },
     // POST to create a new thought (don't forget to push the created thought's _id to the associated user's thoughts array field)
-    // createThought() {
-
-    // },
+    createThought(req, res) {
+        Thought.create(req.body)
+        .then((thought) => {
+            return User.findOneandUpdate(
+                { _id: req.body.userId },
+                { $push: {thoughts: thought._id} },
+                { new: true }
+            );
+        })
+        .then((user) => {
+            !user
+            ? res.status(404).json({message: 'Created thought, but no user was found'})
+            : res.json({message: 'Thought created!'})
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(500).json(err);
+          });
+    },
     // PUT to update a thought by its _id
-    updateThought() {
+    updateThought(req, res) {
         Thought.findOneandUpdate({_id: req.params.id}, { thoughtText: req.body.thoughtText })
         .then((thought) => 
             !thought
@@ -28,7 +48,7 @@ module.exports = {
             .catch((err) => res.status(500).json(err)))
     },
     // DELETE to remove a thought by its _id
-    deleteThought() {
+    deleteThought(req, res) {
         Thought.findOneAndDelete({_id: req.params.id})
             .then((thought) => 
                 !thought
@@ -37,7 +57,7 @@ module.exports = {
                 .catch((err) => res.status(500).json(err)))
     },
     // POST to create a reaction stored in a single thought's reactions array field - thoughtId
-    addReaction() {
+    addReaction(req, res) {
         Thought.findOneandUpdate({_id: req.params.thoughtId},
             {reactions: req.body})
         .then((thought) => 
@@ -47,7 +67,7 @@ module.exports = {
         .catch((err) => res.status(500).json(err));
     },
     // DELETE to pull and remove a reaction by the reaction's reactionId value - thoughtId
-    deleteReaction() {
+    deleteReaction(req, res) {
         Thought.findOneAndDelete({ _id: req.params.thoughtId })
             .then((thought) =>
                 !thought
