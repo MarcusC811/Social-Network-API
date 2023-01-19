@@ -28,13 +28,13 @@ N/A
 
 Navigate to your terminal and run the command ```npm i```
 
-[Step 1 picture](./assets/Step%201.PNG)
+![Step 1 picture](./assets/Step%201.PNG)
 
 ### Step 2
 
 Then you'll need to run the command ```npm start```
 
-[Step 2 picture](./assets/Step%202.PNG)
+![Step 2 picture](./assets/Step%202.PNG)
 
 ### Step 3
 
