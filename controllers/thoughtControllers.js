@@ -36,7 +36,7 @@ module.exports = {
         .catch((err) => {
             console.log(err);
             res.status(500).json(err);
-          });
+        });
     },
     // PUT to update a thought by its _id
     updateThought(req, res) {

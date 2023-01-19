@@ -47,7 +47,7 @@ module.exports = {
     },
     // POST to add a new friend to a user's friend list
     addFriend(req, res) {
-        User.findOneAndUpdate( { _id: req.params.userId }, { friends: req.body })
+        User.findOneAndUpdate( { _id: req.params.userId }, { friends: req.params.friendId })
         .then((user) => 
             !user
                 ? res.status(404).json({message: "No user found with that ID"})
@@ -57,7 +57,7 @@ module.exports = {
     },
     // DELETE to remove a friend from a user's friend list
     deleteFriend(req, res) {
-        Course.findOneAndDelete({friends: req.params.friendId})
+        User.findOneAndDelete({friends: req.params.friendId})
         .then((user) =>
             !user
                 ? res.status(404).json("No user found with that ID")
