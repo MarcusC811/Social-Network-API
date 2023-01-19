@@ -22,7 +22,7 @@ module.exports = {
     createThought(req, res) {
         Thought.create(req.body)
         .then((thought) => {
-            return User.findOneandUpdate(
+            return User.findOneAndUpdate(
                 { _id: req.body.userId },
                 { $push: {thoughts: thought._id} },
                 { new: true }
@@ -40,7 +40,7 @@ module.exports = {
     },
     // PUT to update a thought by its _id
     updateThought(req, res) {
-        Thought.findOneandUpdate({_id: req.params.id}, { thoughtText: req.body.thoughtText })
+        Thought.findOneAndUpdate({_id: req.params.id}, { thoughtText: req.body.thoughtText })
         .then((thought) => 
             !thought
                 ? res.status(404).json({message: "No user found with that ID"})
@@ -58,7 +58,7 @@ module.exports = {
     },
     // POST to create a reaction stored in a single thought's reactions array field - thoughtId
     addReaction(req, res) {
-        Thought.findOneandUpdate({_id: req.params.thoughtId},
+        Thought.findOneAndUpdate({_id: req.params.thoughtId},
             {reactions: req.body})
         .then((thought) => 
             !thought
