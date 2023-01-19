@@ -27,7 +27,7 @@ module.exports = {
     },
     // PUT to update a user by its _id
     updateUser(req, res) {
-        User.findOneAndUpdate({ _id: req.params.id }, {$set: req.body})
+        User.findOneAndUpdate({ _id: req.params.id }, {$set: req.body}, {new: true})
         .then((user) => 
             !user
                 ? res.status(404).json({message: "Invalid submission"})
@@ -47,7 +47,7 @@ module.exports = {
     },
     // POST to add a new friend to a user's friend list
     addFriend(req, res) {
-        User.findOneAndUpdate( { _id: req.params.userId }, { friends: req.params.friendId })
+        User.findOneAndUpdate( { _id: req.params.userId }, { friends: req.params.friendId }, {new: true})
         .then((user) => 
             !user
                 ? res.status(404).json({message: "No user found with that ID"})
@@ -57,7 +57,11 @@ module.exports = {
     },
     // DELETE to remove a friend from a user's friend list
     deleteFriend(req, res) {
-        User.findOneAndDelete({friends: req.params.friendId})
+        User.findByIdAndUpdate(
+            { _id: req.params.userId },
+            { $pull: { friends: req.params.friendId } },
+            { new: true }
+        )
         .then((user) =>
             !user
                 ? res.status(404).json("No user found with that ID")

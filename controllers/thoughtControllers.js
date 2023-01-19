@@ -59,7 +59,8 @@ module.exports = {
     // POST to create a reaction stored in a single thought's reactions array field - thoughtId
     addReaction(req, res) {
         Thought.findOneAndUpdate({_id: req.params.thoughtId},
-            {reactions: req.body})
+            {reactions: req.body},
+            {new: true})
         .then((thought) => 
             !thought
             ? res.status(404).json({message: "No thought found with that ID"})
@@ -68,12 +69,15 @@ module.exports = {
     },
     // DELETE to pull and remove a reaction by the reaction's reactionId value - thoughtId
     deleteReaction(req, res) {
-        Thought.findOneAndDelete({ _id: req.params.thoughtId })
+        Thought.findOneAndUpdate(
+            { _id: req.params.thoughtId },
+            { $pull: { reactions: req.params.reactionId } },
+            { new: true }
+        )
             .then((thought) =>
                 !thought
                   ? res.status(404).json({ message: 'No thought with that ID' })
-                  : Student.deleteMany({ _id: { $in: thought.reactions } }))
-              .then(() => res.json({ message: 'Thought and reactions deleted' }))
-              .catch((err) => res.status(500).json(err));
+                  : res.json({ message: 'Thought and reactions deleted' }))
+            .catch((err) => res.status(500).json(err));
     },
 }
