@@ -59,7 +59,7 @@ module.exports = {
     // POST to create a reaction stored in a single thought's reactions array field - thoughtId
     addReaction(req, res) {
         Thought.findOneAndUpdate({_id: req.params.thoughtId},
-            {reactions: req.body},
+            {$push: {reactions: req.body}},
             {new: true})
         .then((thought) => 
             !thought
@@ -71,7 +71,7 @@ module.exports = {
     deleteReaction(req, res) {
         Thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $pull: { reactions: req.params.reactionId } },
+            {$pull: {'reactions': {reactionId : req.params.reactionId}}},
             { new: true }
         )
             .then((thought) =>
